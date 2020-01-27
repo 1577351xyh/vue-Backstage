@@ -19,7 +19,7 @@ export default {
   computed: {
     routes() {
       console.log(this.$store.state.router)
-      return this.$store.state.router[0].children
+      return this.$store.state.router
     }
   }
 }

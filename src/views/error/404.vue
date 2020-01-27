@@ -1,5 +1,5 @@
 <template>
-  <div>我是ruleDetails</div>
+  <div>404,找不到当前路由</div>
 </template>
 <script>
 export default {

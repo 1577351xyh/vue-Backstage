@@ -1,5 +1,5 @@
 <template>
-  <div>我是ruleDetails</div>
+  <div>monitoringDynamics</div>
 </template>
 <script>
 export default {

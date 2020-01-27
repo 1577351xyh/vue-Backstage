@@ -1,5 +1,5 @@
 <template>
-  <div>我是ruleDetails</div>
+  <div>createScoringModel</div>
 </template>
 <script>
 export default {

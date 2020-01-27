@@ -11,8 +11,12 @@ import searchResult from '../views/page/searchResult.vue'
 import creditService from '../views/page/creditService.vue'
 import messageCenter from '../views/page/messageCenter'
 import searchRecording from '../views/page/searchRecording'
-
+import monitoringDynamics from '../views/page/monitoringDynamics'
+import createScoringModel from '../views/page/createScoringModel'
+import error from '../views/error/404.vue'
 import directory from '../views/layout/index.vue'
+
+
 function getComponent(names) {
   const componentObj = {
     'businessRegistration': businessRegistration,
@@ -20,7 +24,9 @@ function getComponent(names) {
     "searchResult": searchResult,
     "creditService": creditService,
     'messageCenter': messageCenter,
-    "searchRecording": searchRecording
+    "searchRecording": searchRecording,
+    'monitoringDynamics': monitoringDynamics,
+    'createScoringModel': createScoringModel
   }
   return componentObj[names]
 }
@@ -64,39 +70,53 @@ function routerGo(to, next) {
 
 //过滤路由
 function filterAsyncRouter(asyncRouterMap) {
-  let arr = [{
-    path: '/home',
-    component: directory,
-    children: []
-  }];
-
+  let arr = [];
   asyncRouterMap.forEach(route => {
     let { name: title, icon: iconfont, url: path, code: component, category: category } = route;
+    // 没有子菜单
     var router = {
-      path: component,
-      component: getComponent(component),
-      meta: {
-        title,
-        iconfont
-      },
+      path: '',
+      component: directory,
       hidden: !(category == 'directory' || category == 'menu') || false,
-      children: []
+      children: [{
+        path: component,
+        component: getComponent(component),
+        meta: {
+          title,
+          icon: iconfont
+        },
+      }]
     }
-
+    //如果有子菜单
     if (route.children && route.children.length) {
+      router = {
+        path,
+        component: directory,
+        hidden: !(category == 'directory' || category == 'menu') || false,
+        meta: {
+          title,
+          icon: iconfont
+        },
+        children: []
+      }
       route.children.forEach(children => {
         let obj = {
-          path: children.url,
+          path: children.code,
           name: children.name,
           meta: {
             title: children.name
           },
-          component: getComponent(component),
+          component: getComponent(children.code),
         }
         router.children.push(obj)
       })
     }
-    arr[0].children.push(router)
+    arr.push(router)
+  })
+  arr.push({
+    path: "*",
+    redirect: "/404",
+    component:error
   })
   return arr;
 }
